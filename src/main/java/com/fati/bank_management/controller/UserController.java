@@ -1,6 +1,7 @@
 package com.fati.bank_management.controller;
 
 import com.fati.bank_management.dto.CreateUserRequest;
+import com.fati.bank_management.dto.PatchUserRequest;
 import com.fati.bank_management.dto.UpdateUserRequest;
 import com.fati.bank_management.dto.UserResponse;
 import com.fati.bank_management.service.UserService;
@@ -58,5 +59,16 @@ public class UserController {
     public UserResponse updateUser(@PathVariable Long id,
                                    @Valid @RequestBody UpdateUserRequest request) {
         return userService.updateUser(id, request);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Change only the fields you send")
+    @ApiResponse(responseCode = "200", description = "User updated")
+    @ApiResponse(responseCode = "400", description = "Invalid request data")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @ApiResponse(responseCode = "409", description = "Email already in use")
+    public UserResponse patchUser(@PathVariable Long id,
+                                  @Valid @RequestBody PatchUserRequest request) {
+        return userService.patchUser(id, request);
     }
 }

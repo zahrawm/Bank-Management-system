@@ -1,6 +1,7 @@
 package com.fati.bank_management.service;
 
 import com.fati.bank_management.dto.CreateUserRequest;
+import com.fati.bank_management.dto.PatchUserRequest;
 import com.fati.bank_management.dto.UpdateUserRequest;
 import com.fati.bank_management.dto.UserResponse;
 import com.fati.bank_management.entity.User;
@@ -64,6 +65,27 @@ public class UserService {
 
         user.setFullName(request.fullName().trim());
         user.setEmail(email);
+
+        return toResponse(user);
+    }
+
+    @Transactional
+    public UserResponse patchUser(Long id, PatchUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        if (request.fullName() != null && !request.fullName().isBlank()) {
+            user.setFullName(request.fullName().trim());
+        }
+
+        if (request.email() != null && !request.email().isBlank()) {
+            String email = request.email().trim().toLowerCase();
+
+            if (userRepository.existsByEmailAndIdNot(email, id)) {
+                throw new EmailAlreadyExistsException(email);
+            }
+            user.setEmail(email);
+        }
 
         return toResponse(user);
     }
