@@ -1,6 +1,7 @@
 package com.fati.bank_management.controller;
 
 import com.fati.bank_management.dto.CreateUserRequest;
+import com.fati.bank_management.dto.UpdateUserRequest;
 import com.fati.bank_management.dto.UserResponse;
 import com.fati.bank_management.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,5 +49,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-
+    @PutMapping("/{id}")
+    @Operation(summary = "Replace a user's details")
+    @ApiResponse(responseCode = "200", description = "User updated")
+    @ApiResponse(responseCode = "400", description = "Invalid request data")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @ApiResponse(responseCode = "409", description = "Email already in use")
+    public UserResponse updateUser(@PathVariable Long id,
+                                   @Valid @RequestBody UpdateUserRequest request) {
+        return userService.updateUser(id, request);
+    }
 }

@@ -1,9 +1,9 @@
 package com.fati.bank_management.service;
 
 import com.fati.bank_management.dto.CreateUserRequest;
+import com.fati.bank_management.dto.UpdateUserRequest;
 import com.fati.bank_management.dto.UserResponse;
 import com.fati.bank_management.entity.User;
-
 import com.fati.bank_management.exception.EmailAlreadyExistsException;
 import com.fati.bank_management.exception.UserNotFoundException;
 import com.fati.bank_management.repository.UserRepository;
@@ -49,6 +49,23 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    @Transactional
+    public UserResponse updateUser(Long id, UpdateUserRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        String email = request.email().trim().toLowerCase();
+
+        if (userRepository.existsByEmailAndIdNot(email, id)) {
+            throw new EmailAlreadyExistsException(email);
+        }
+
+        user.setFullName(request.fullName().trim());
+        user.setEmail(email);
+
+        return toResponse(user);
     }
 
     private UserResponse toResponse(User user) {
