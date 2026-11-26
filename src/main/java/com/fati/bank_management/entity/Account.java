@@ -1,11 +1,16 @@
 package com.fati.bank_management.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "accounts")
+@Getter
+@Setter
 public class Account {
 
     @Id
@@ -37,6 +42,4 @@ public class Account {
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
-
-    // Generate the getters and setters with Cmd + N → Getter and Setter
 }
