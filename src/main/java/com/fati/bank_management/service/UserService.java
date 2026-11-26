@@ -4,6 +4,7 @@ import com.fati.bank_management.dto.CreateUserRequest;
 import com.fati.bank_management.dto.UserResponse;
 import com.fati.bank_management.entity.User;
 
+import com.fati.bank_management.exception.EmailAlreadyExistsException;
 import com.fati.bank_management.exception.UserNotFoundException;
 import com.fati.bank_management.repository.UserRepository;
 import org.springframework.stereotype.Service;

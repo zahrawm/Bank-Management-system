@@ -32,6 +32,11 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "Validation failed", fieldErrors);
     }
 
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAccountNotFound(AccountNotFoundException ex) {
+        return build(HttpStatus.NOT_FOUND, ex.getMessage(), Map.of());
+    }
+
     private ResponseEntity<ErrorResponse> build(HttpStatus status, String message,
                                                 Map<String, String> fieldErrors) {
         ErrorResponse body = new ErrorResponse(
