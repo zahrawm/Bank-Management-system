@@ -2,6 +2,7 @@ package com.fati.bank_management.service;
 
 import com.fati.bank_management.dto.AccountResponse;
 import com.fati.bank_management.dto.CreateAccountRequest;
+import com.fati.bank_management.dto.UpdateAccountRequest;
 import com.fati.bank_management.entity.Account;
 import com.fati.bank_management.entity.User;
 import com.fati.bank_management.exception.AccountNotFoundException;
@@ -58,6 +59,16 @@ public class AccountService {
                 .toList();
     }
 
+    @Transactional
+    public AccountResponse updateAccount(Long id, UpdateAccountRequest request) {
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(id));
+
+        account.setAccountName(request.accountName().trim());
+
+        return toResponse(account);
+    }
+
     private String generateAccountNumber() {
         String number;
         do {
@@ -65,8 +76,6 @@ public class AccountService {
         } while (accountRepository.existsByAccountNumber(number));
         return number;
     }
-
-
 
     private AccountResponse toResponse(Account account) {
         return new AccountResponse(

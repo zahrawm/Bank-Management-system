@@ -2,6 +2,7 @@ package com.fati.bank_management.controller;
 
 import com.fati.bank_management.dto.AccountResponse;
 import com.fati.bank_management.dto.CreateAccountRequest;
+import com.fati.bank_management.dto.UpdateAccountRequest;
 import com.fati.bank_management.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,5 +49,15 @@ public class AccountController {
     @ApiResponse(responseCode = "404", description = "User not found")
     public List<AccountResponse> getAccountsByUser(@RequestParam Long userId) {
         return accountService.getAccountsByUser(userId);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Rename an account")
+    @ApiResponse(responseCode = "200", description = "Account renamed")
+    @ApiResponse(responseCode = "400", description = "Invalid request data")
+    @ApiResponse(responseCode = "404", description = "Account not found")
+    public AccountResponse updateAccount(@PathVariable Long id,
+                                         @Valid @RequestBody UpdateAccountRequest request) {
+        return accountService.updateAccount(id, request);
     }
 }
